@@ -1,5 +1,5 @@
 //
-//  Card.swift
+//  CreditCard.swift
 //  SimpleCreditLedger
 //
 //  Created by Jiaming Guo on 2023-12-25.
@@ -18,7 +18,7 @@ enum CardType: String, Codable, CaseIterable {
 final class CreditCard {
     var nickname: String
     var type: CardType
-    @Relationship(deleteRule: .nullify, inverse: \Transaction.card) var transactions = [Transaction]()
+    @Relationship(deleteRule: .nullify, inverse: \Transaction.creditCard) var transactions = [Transaction]()
     
     init(nickname: String, type: CardType, transactions: [Transaction] = [Transaction]()) {
         self.nickname = nickname

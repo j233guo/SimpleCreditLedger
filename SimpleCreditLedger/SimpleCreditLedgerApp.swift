@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct SimpleCreditLedgerApp: App {
@@ -13,5 +14,6 @@ struct SimpleCreditLedgerApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [Transaction.self, CreditCard.self])
     }
 }

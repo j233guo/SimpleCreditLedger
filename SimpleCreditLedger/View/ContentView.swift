@@ -9,13 +9,32 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            TabView {
+                TransactionsView()
+                    .tabItem {
+                        Label("Transactions", systemImage: "tablecells.badge.ellipsis")
+                    }
+                CardsView()
+                    .tabItem {
+                        Label("Cards", systemImage: "creditcard")
+                    }
+            }
+
+            GeometryReader { geometry in
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        AddButtonView(action: {
+                            
+                        })
+                        .offset(y: geometry.safeAreaInsets.bottom / 4 )
+                        Spacer()
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 
