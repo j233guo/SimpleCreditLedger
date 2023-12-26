@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showAddTransactionSheet = false
+    
     var body: some View {
         ZStack {
             TabView {
@@ -27,13 +29,16 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         AddButtonView(action: {
-                            
+                            showAddTransactionSheet = true
                         })
                         .offset(y: geometry.safeAreaInsets.bottom / 4 )
                         Spacer()
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showAddTransactionSheet) {
+            AddTransactionView()
         }
     }
 }

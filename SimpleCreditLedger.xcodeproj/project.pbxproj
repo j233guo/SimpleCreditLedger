@@ -16,6 +16,7 @@
 		C9EE8AEB2B3A8C4100AEF8F3 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AEA2B3A8C4100AEF8F3 /* CardsView.swift */; };
 		C9EE8AED2B3A8C5400AEF8F3 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AEC2B3A8C5400AEF8F3 /* TransactionsView.swift */; };
 		C9EE8AF02B3A8EF600AEF8F3 /* AddButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AEF2B3A8EF600AEF8F3 /* AddButtonView.swift */; };
+		C9EE8AF22B3A93DB00AEF8F3 /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AF12B3A93DB00AEF8F3 /* AddTransactionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		C9EE8AEA2B3A8C4100AEF8F3 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		C9EE8AEC2B3A8C5400AEF8F3 /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
 		C9EE8AEF2B3A8EF600AEF8F3 /* AddButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButtonView.swift; sourceTree = "<group>"; };
+		C9EE8AF12B3A93DB00AEF8F3 /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				C9EE8AEC2B3A8C5400AEF8F3 /* TransactionsView.swift */,
+				C9EE8AF12B3A93DB00AEF8F3 /* AddTransactionView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				C9EE8AEB2B3A8C4100AEF8F3 /* CardsView.swift in Sources */,
 				C9EE8AD32B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift in Sources */,
 				C9EE8AE32B3A85FA00AEF8F3 /* Transaction.swift in Sources */,
+				C9EE8AF22B3A93DB00AEF8F3 /* AddTransactionView.swift in Sources */,
 				C9EE8AE52B3A879600AEF8F3 /* CreditCard.swift in Sources */,
 				C9EE8AED2B3A8C5400AEF8F3 /* TransactionsView.swift in Sources */,
 			);
