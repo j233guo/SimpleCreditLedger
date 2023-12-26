@@ -5,6 +5,7 @@
 //  Created by Jiaming Guo on 2023-12-25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
@@ -44,5 +45,12 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Transaction.self, CreditCard.self, configurations: config)
+        return ContentView()
+            .modelContainer(container)
+    } catch {
+        fatalError("Failed to create model container")
+    }
 }

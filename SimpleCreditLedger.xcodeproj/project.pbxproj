@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C90E577E2B3A9FD1008B4FAD /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */; };
+		C90E57812B3AA0FA008B4FAD /* FormatAsCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90E57802B3AA0FA008B4FAD /* FormatAsCurrency.swift */; };
+		C9A7F4B62B3B63590065EADF /* CategorySelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */; };
 		C9EE8AD32B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AD22B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift */; };
 		C9EE8AD52B3A82FC00AEF8F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AD42B3A82FC00AEF8F3 /* ContentView.swift */; };
 		C9EE8AD72B3A82FD00AEF8F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9EE8AD62B3A82FD00AEF8F3 /* Assets.xcassets */; };
@@ -20,6 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
+		C90E57802B3AA0FA008B4FAD /* FormatAsCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatAsCurrency.swift; sourceTree = "<group>"; };
+		C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorView.swift; sourceTree = "<group>"; };
 		C9EE8ACF2B3A82FC00AEF8F3 /* SimpleCreditLedger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleCreditLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9EE8AD22B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCreditLedgerApp.swift; sourceTree = "<group>"; };
 		C9EE8AD42B3A82FC00AEF8F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +50,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C90E577F2B3AA0EB008B4FAD /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				C90E57802B3AA0FA008B4FAD /* FormatAsCurrency.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		C9EE8AC62B3A82FC00AEF8F3 = {
 			isa = PBXGroup;
 			children = (
@@ -63,6 +77,7 @@
 		C9EE8AD12B3A82FC00AEF8F3 /* SimpleCreditLedger */ = {
 			isa = PBXGroup;
 			children = (
+				C90E577F2B3AA0EB008B4FAD /* Helper */,
 				C9EE8AE12B3A85DF00AEF8F3 /* Model */,
 				C9EE8AE02B3A85D800AEF8F3 /* View */,
 				C9EE8AD22B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift */,
@@ -113,6 +128,7 @@
 			children = (
 				C9EE8AEC2B3A8C5400AEF8F3 /* TransactionsView.swift */,
 				C9EE8AF12B3A93DB00AEF8F3 /* AddTransactionView.swift */,
+				C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -121,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				C9EE8AEF2B3A8EF600AEF8F3 /* AddButtonView.swift */,
+				C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -197,12 +214,15 @@
 			files = (
 				C9EE8AF02B3A8EF600AEF8F3 /* AddButtonView.swift in Sources */,
 				C9EE8AD52B3A82FC00AEF8F3 /* ContentView.swift in Sources */,
+				C9A7F4B62B3B63590065EADF /* CategorySelectorView.swift in Sources */,
+				C90E577E2B3A9FD1008B4FAD /* TransactionListView.swift in Sources */,
 				C9EE8AEB2B3A8C4100AEF8F3 /* CardsView.swift in Sources */,
 				C9EE8AD32B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift in Sources */,
 				C9EE8AE32B3A85FA00AEF8F3 /* Transaction.swift in Sources */,
 				C9EE8AF22B3A93DB00AEF8F3 /* AddTransactionView.swift in Sources */,
 				C9EE8AE52B3A879600AEF8F3 /* CreditCard.swift in Sources */,
 				C9EE8AED2B3A8C5400AEF8F3 /* TransactionsView.swift in Sources */,
+				C90E57812B3AA0FA008B4FAD /* FormatAsCurrency.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,11 +13,17 @@ struct TransactionsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("Empty Transaction List")
-                    .font(.title)
-                Text("Tap on \"+\" to log a new transaction")
-                    .font(.caption)
+            Group {
+                if transactions.count == 0 {
+                    VStack {
+                        Text("Empty Transaction List")
+                            .font(.title)
+                        Text("Tap on \"+\" to log a new transaction")
+                            .font(.caption)
+                    }
+                } else {
+                    TransactionListView(transactions: transactions)
+                }
             }
             .foregroundStyle(.secondary)
             .navigationTitle("Transactions")
