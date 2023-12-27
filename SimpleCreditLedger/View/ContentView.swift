@@ -20,7 +20,7 @@ struct ContentView: View {
                     }
                 CardsView()
                     .tabItem {
-                        Label("Cards", systemImage: "creditcard")
+                        Label("Credit Cards", systemImage: "creditcard")
                     }
             }
 
