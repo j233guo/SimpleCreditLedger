@@ -19,9 +19,9 @@ struct AddButtonView: View {
                 .foregroundColor(.white)
                 .scaleEffect(CGSize(width: 1.5, height: 1.5))
         }
-        .frame(width: 60, height: 60)
-        .background(Color.yellow)
-        .cornerRadius(20)
+        .frame(width: 60, height: 50)
+        .background(Color("AddButtonColor"))
+        .cornerRadius(15)
         .shadow(radius: 2, x: 0, y: 3)
         .padding()
     }
