@@ -34,7 +34,7 @@ struct AddTransactionView: View {
             amount: tempTransactionAmount,
             transactionType: tempTransactionType,
             category: tempTransactionCategory,
-            Date: tempTransactionDate,
+            date: tempTransactionDate,
             note: tempTransactionNote
         )
         modelContext.insert(newTransaction)

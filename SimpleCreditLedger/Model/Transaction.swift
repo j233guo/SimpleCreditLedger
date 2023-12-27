@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 enum TransactionType: Codable {
     case income, expense
@@ -52,11 +53,32 @@ fileprivate let categoryImageSystemNameDictionary: [TransactionCategory : String
     .misc: "cart.badge.questionmark"
 ]
 
+fileprivate let categoryColorDictionary: [TransactionCategory : Color] = [
+    .salary: .green,
+    .investment: .green,
+    .gift: .green,
+    .refund: .green,
+    .bill: .gray,
+    .dining: .orange,
+    .drugstore: .pink,
+    .entertainment: .gray,
+    .gas: .yellow,
+    .grocery: .orange,
+    .transit: .teal,
+    .travel: .teal,
+    .subscription: .gray,
+    .misc: .gray
+]
+
 let incomeCategories: [TransactionCategory] = [.salary, .investment, .gift, .refund]
 let expenseCategories: [TransactionCategory] = [.bill, .dining, .drugstore, .entertainment, .gas, .grocery, .transit, .travel, .subscription, .misc]
 
 func categoryImageName(_ category: TransactionCategory) -> String {
     return categoryImageSystemNameDictionary[category] ?? "cart.badge.questionmark"
+}
+
+func categoryColor(_ category: TransactionCategory) -> Color {
+    return categoryColorDictionary[category] ?? .gray
 }
 
 @Model
@@ -65,16 +87,16 @@ final class Transaction {
     var transactionType: TransactionType
     var paymentType: PaymentType?
     var category: TransactionCategory
-    var Date: Date
+    var date: Date
     var creditCard: CreditCard?
     var note: String
     
-    init(amount: Double, transactionType: TransactionType, paymentType: PaymentType? = nil, category: TransactionCategory, Date: Date, creditCard: CreditCard? = nil, note: String) {
+    init(amount: Double, transactionType: TransactionType, paymentType: PaymentType? = nil, category: TransactionCategory, date: Date, creditCard: CreditCard? = nil, note: String) {
         self.amount = amount
         self.transactionType = transactionType
         self.paymentType = paymentType
         self.category = category
-        self.Date = Date
+        self.date = date
         self.creditCard = creditCard
         self.note = note
     }
