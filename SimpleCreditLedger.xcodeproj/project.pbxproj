@@ -12,6 +12,7 @@
 		C9A7F4B62B3B63590065EADF /* CategorySelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */; };
 		C9A7F4B82B3B6C270065EADF /* TransactionListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */; };
 		C9A7F4BA2B3B6C410065EADF /* CategoryLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */; };
+		C9A7F4BC2B3BB5C30065EADF /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4BB2B3BB5C30065EADF /* TransactionDetailView.swift */; };
 		C9EE8AD32B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AD22B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift */; };
 		C9EE8AD52B3A82FC00AEF8F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EE8AD42B3A82FC00AEF8F3 /* ContentView.swift */; };
 		C9EE8AD72B3A82FD00AEF8F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9EE8AD62B3A82FD00AEF8F3 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorView.swift; sourceTree = "<group>"; };
 		C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListRowView.swift; sourceTree = "<group>"; };
 		C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryLogoView.swift; sourceTree = "<group>"; };
+		C9A7F4BB2B3BB5C30065EADF /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		C9EE8ACF2B3A82FC00AEF8F3 /* SimpleCreditLedger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleCreditLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9EE8AD22B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCreditLedgerApp.swift; sourceTree = "<group>"; };
 		C9EE8AD42B3A82FC00AEF8F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */,
 				C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */,
 				C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */,
+				C9A7F4BB2B3BB5C30065EADF /* TransactionDetailView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				C9EE8AD32B3A82FC00AEF8F3 /* SimpleCreditLedgerApp.swift in Sources */,
 				C9EE8AE32B3A85FA00AEF8F3 /* Transaction.swift in Sources */,
 				C9EE8AF22B3A93DB00AEF8F3 /* AddTransactionView.swift in Sources */,
+				C9A7F4BC2B3BB5C30065EADF /* TransactionDetailView.swift in Sources */,
 				C9EE8AE52B3A879600AEF8F3 /* CreditCard.swift in Sources */,
 				C9EE8AED2B3A8C5400AEF8F3 /* TransactionsView.swift in Sources */,
 				C90E57812B3AA0FA008B4FAD /* FormatAsCurrency.swift in Sources */,

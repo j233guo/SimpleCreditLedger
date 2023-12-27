@@ -25,7 +25,11 @@ struct TransactionListView: View {
             ForEach(groupedTransactions.keys.sorted { $0 > $1 }, id: \.self) { date in
                 Section(header: Text("\(date, formatter: sectionDateFormatter)")) {
                     ForEach(groupedTransactions[date]!, id: \.id) { data in
-                        TransactionListRowView(transaction: data)
+                        NavigationLink {
+                            TransactionDetailView(transaction: data)
+                        } label: {
+                            TransactionListRowView(transaction: data)
+                        }
                     }
                 }
             }
