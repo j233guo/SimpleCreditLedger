@@ -20,16 +20,15 @@ struct AddTransactionView: View {
     @State private var tempTransactionAmount: Double = 0.0
     @State private var tempTransactionDate: Date = .now
     @State private var tempTransactionNote: String = ""
+    @State private var tempPaymentCreditCard: CreditCard? = nil
     
     @FocusState private var amountIsFocused: Bool
     @FocusState private var noteIsFocused: Bool
     
-    var validateForm: Bool {
-        tempTransactionAmount > 0.0
-    }
+    var validateAmount: Bool { tempTransactionAmount > 0.0 }
     
     func save() {
-        guard validateForm else { return }
+        guard validateAmount else { return }
         let newTransaction = Transaction(
             amount: tempTransactionAmount,
             transactionType: tempTransactionType,
@@ -37,6 +36,10 @@ struct AddTransactionView: View {
             date: tempTransactionDate,
             note: tempTransactionNote
         )
+        if tempTransactionType == .expense {
+            newTransaction.paymentType = tempPaymentType
+            newTransaction.creditCard = tempPaymentCreditCard
+        }
         modelContext.insert(newTransaction)
         dismiss()
     }
@@ -76,8 +79,20 @@ struct AddTransactionView: View {
                                 .tag(PaymentType.cash)
                             Text("Debit")
                                 .tag(PaymentType.debit)
-                            Text("Credit")
-                                .tag(PaymentType.credit)
+                            if creditCards.count != 0 {
+                                Text("Credit Card")
+                                    .tag(PaymentType.credit)
+                            }
+                        }
+                        if tempPaymentType == .credit {
+                            Picker("Credit Card", selection: $tempPaymentCreditCard) {
+                                Text("Select a Card")
+                                    .tag(nil as CreditCard?)
+                                ForEach(creditCards) { card in
+                                    Text("\(card.nickname)")
+                                        .tag(card as CreditCard?)
+                                }
+                            }
                         }
                     }
                 }
