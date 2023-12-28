@@ -19,7 +19,7 @@ struct CardsView: View {
                 Section {
                     ForEach(cards) { card in
                         NavigationLink {
-                            CardDetailView()
+                            CardDetailView(card: card)
                         } label: {
                             HStack {
                                 CardLogoView(cardType: card.type)
