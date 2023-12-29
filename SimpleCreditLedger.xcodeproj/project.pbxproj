@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C90E577E2B3A9FD1008B4FAD /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */; };
 		C90E57812B3AA0FA008B4FAD /* FormatAsCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90E57802B3AA0FA008B4FAD /* FormatAsCurrency.swift */; };
+		C96ECBEC2B3E509600F042BB /* EditTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96ECBEB2B3E509600F042BB /* EditTransactionView.swift */; };
 		C9A7F4B62B3B63590065EADF /* CategorySelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */; };
 		C9A7F4B82B3B6C270065EADF /* TransactionListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */; };
 		C9A7F4BA2B3B6C410065EADF /* CategoryLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
 		C90E57802B3AA0FA008B4FAD /* FormatAsCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatAsCurrency.swift; sourceTree = "<group>"; };
+		C96ECBEB2B3E509600F042BB /* EditTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionView.swift; sourceTree = "<group>"; };
 		C9A7F4B52B3B63590065EADF /* CategorySelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorView.swift; sourceTree = "<group>"; };
 		C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListRowView.swift; sourceTree = "<group>"; };
 		C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryLogoView.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			children = (
 				C9EE8AEC2B3A8C5400AEF8F3 /* TransactionsView.swift */,
 				C9EE8AF12B3A93DB00AEF8F3 /* AddTransactionView.swift */,
+				C96ECBEB2B3E509600F042BB /* EditTransactionView.swift */,
 				C90E577D2B3A9FD1008B4FAD /* TransactionListView.swift */,
 				C9A7F4B72B3B6C270065EADF /* TransactionListRowView.swift */,
 				C9A7F4B92B3B6C400065EADF /* CategoryLogoView.swift */,
@@ -247,6 +250,7 @@
 				C90E57812B3AA0FA008B4FAD /* FormatAsCurrency.swift in Sources */,
 				C9A7F4C22B3BC3780065EADF /* CardDetailView.swift in Sources */,
 				C9A7F4BE2B3BBC3D0065EADF /* AddCardView.swift in Sources */,
+				C96ECBEC2B3E509600F042BB /* EditTransactionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

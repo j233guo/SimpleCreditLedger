@@ -1,21 +1,23 @@
 //
-//  AddTransactionView.swift
+//  EditTransactionView.swift
 //  SimpleCreditLedger
 //
-//  Created by Jiaming Guo on 2023-12-25.
+//  Created by Jiaming Guo on 2023-12-28.
 //
 
 import SwiftData
 import SwiftUI
 
-struct AddTransactionView: View {
+struct EditTransactionView: View {
+    var transaction: Transaction
+    
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
     @Query var creditCards: [CreditCard]
     
     @State private var tempTransactionType: TransactionType = .expense
-    @State private var tempPaymentType: PaymentType = .cash
+    @State private var tempPaymentType: PaymentType? = .cash
     @State private var tempTransactionCategory: TransactionCategory = .dining
     @State private var tempTransactionAmount: Double = 0.0
     @State private var tempTransactionDate: Date = .now
@@ -25,20 +27,14 @@ struct AddTransactionView: View {
     @FocusState private var amountIsFocused: Bool
     @FocusState private var noteIsFocused: Bool
     
-    var validateAmount: Bool { tempTransactionAmount > 0.0 }
-    
     func save() {
-        guard validateAmount else { return }
-        let newTransaction = Transaction(
-            amount: tempTransactionAmount,
-            transactionType: tempTransactionType,
-            category: tempTransactionCategory,
-            date: tempTransactionDate,
-            note: tempTransactionNote
-        )
-        newTransaction.paymentType = tempTransactionType == .expense ? tempPaymentType : nil
-        newTransaction.creditCard = tempTransactionType == .expense ? tempPaymentType == .credit ? tempPaymentCreditCard : nil : nil
-        modelContext.insert(newTransaction)
+        transaction.transactionType = tempTransactionType
+        transaction.paymentType = tempTransactionType == .expense ? tempPaymentType : nil
+        transaction.category = tempTransactionCategory
+        transaction.amount = tempTransactionAmount
+        transaction.date = tempTransactionDate
+        transaction.note = tempTransactionNote
+        transaction.creditCard = tempTransactionType == .expense ? tempPaymentType == .credit ? tempPaymentCreditCard : nil : nil
         dismiss()
     }
     
@@ -74,12 +70,12 @@ struct AddTransactionView: View {
                     if tempTransactionType == .expense {
                         Picker("Payment Type", selection: $tempPaymentType) {
                             Text("Cash")
-                                .tag(PaymentType.cash)
+                                .tag(PaymentType.cash as PaymentType?)
                             Text("Debit")
-                                .tag(PaymentType.debit)
+                                .tag(PaymentType.debit as PaymentType?)
                             if creditCards.count != 0 {
                                 Text("Credit Card")
-                                    .tag(PaymentType.credit)
+                                    .tag(PaymentType.credit as PaymentType?)
                             }
                         }
                         if tempPaymentType == .credit {
@@ -102,7 +98,7 @@ struct AddTransactionView: View {
                     Text("Notes")
                 }
             }
-            .navigationTitle("New Transaction")
+            .navigationTitle("Edit Transaction")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -122,14 +118,24 @@ struct AddTransactionView: View {
                 }
             }
         }
+        .onAppear {
+            tempTransactionType = transaction.transactionType
+            tempPaymentType = transaction.paymentType
+            tempTransactionCategory = transaction.category
+            tempTransactionAmount = transaction.amount
+            tempTransactionDate = transaction.date
+            tempTransactionNote = transaction.note
+            tempPaymentCreditCard = transaction.creditCard
+        }
     }
 }
 
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: CreditCard.self, Transaction.self, configurations: config)
-        return AddTransactionView()
+        let container = try ModelContainer(for: Transaction.self, configurations: config)
+        let example = Transaction(amount: 100.00, transactionType: .expense, category: .dining, date: .distantFuture, note: "")
+        return EditTransactionView(transaction: example)
             .modelContainer(container)
     } catch {
         fatalError("Failed to create model container")

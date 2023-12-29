@@ -38,6 +38,7 @@ struct TransactionDetailView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var showDeleteConfirmation = false
+    @State private var showEditTransactionForm = false
     
     var transaction: Transaction
     
@@ -56,7 +57,7 @@ struct TransactionDetailView: View {
             }
             Section {
                 Button("Edit Transaction Info") {
-                    
+                    showEditTransactionForm = true
                 }
                 Button("Delete This Transaction", role: .destructive) {
                     showDeleteConfirmation = true
@@ -66,6 +67,9 @@ struct TransactionDetailView: View {
         .scrollDisabled(true)
         .navigationTitle("Transaction Detail")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showEditTransactionForm) {
+            EditTransactionView(transaction: transaction)
+        }
         .confirmationDialog("Confirm Delete", isPresented: $showDeleteConfirmation) {
             Button("Confirm Delete", role: .destructive, action: deleteTransaction)
         }
