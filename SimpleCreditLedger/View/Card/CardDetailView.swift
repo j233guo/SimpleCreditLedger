@@ -14,6 +14,7 @@ struct CardDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
+    @State private var showEditCardForm = false
     @State private var showDeleteConfirmation = false
     
     func deleteCard() {
@@ -32,7 +33,7 @@ struct CardDetailView: View {
                 
                 Section {
                     Button("Edit Card") {
-                        
+                        showEditCardForm = true
                     }
                     Button("Remove This Card", role: .destructive) {
                         showDeleteConfirmation = true
@@ -41,6 +42,9 @@ struct CardDetailView: View {
             }
             .navigationTitle("\(card.nickname)")
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .sheet(isPresented: $showEditCardForm) {
+            EditCardView(card: card)
         }
         .confirmationDialog("Confirm Delete", isPresented: $showDeleteConfirmation) {
             Button("Confirm Delete", role: .destructive, action: deleteCard)
