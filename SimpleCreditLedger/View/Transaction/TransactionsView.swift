@@ -9,7 +9,24 @@ import SwiftData
 import SwiftUI
 
 struct TransactionsView: View {
+    @State private var filterExpanded = false
+    @State private var startDate: Date
+    @State private var endDate: Date = .now
+    
     @Query private var transactions: [Transaction]
+    
+    init() {
+        if let date = Calendar.current.date(byAdding: .month, value: -1, to: Date()) {
+            _startDate = State(initialValue: date)
+        } else {
+            _startDate = State(initialValue: Date())
+        }
+        if let date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) {
+            _endDate = State(initialValue: date)
+        } else {
+            _endDate = State(initialValue: Date())
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -22,7 +39,10 @@ struct TransactionsView: View {
                             .font(.caption)
                     }
                 } else {
-                    TransactionListView(transactions: transactions)
+                    let transactions = filterExpanded ? transactions.filter { transaction in
+                        isDate(transaction.date, greaterThanOrEqualTo: startDate) && isDate(transaction.date, lessThanOrEqualTo: endDate)
+                    } : transactions
+                    TransactionListView(transactions: transactions, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
                 }
             }
             .foregroundStyle(.secondary)

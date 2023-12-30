@@ -1,15 +1,17 @@
 //
-//  AddCardView.swift
+//  EditCardView.swift
 //  SimpleCreditLedger
 //
-//  Created by Jiaming Guo on 2023-12-26.
+//  Created by Jiaming Guo on 2023-12-28.
 //
 
+import SwiftData
 import SwiftUI
 
-struct AddCardView: View {
+struct EditCardView: View {
+    var card: CreditCard
+    
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
     
     @State private var tempCardNickname: String = "My VISA Card"
     @State private var tempCardType: CardType = .visa
@@ -28,8 +30,8 @@ struct AddCardView: View {
     
     func save() {
         guard validateCardName else { return }
-        let newCard = CreditCard(nickname: tempCardNickname, type: tempCardType)
-        modelContext.insert(newCard)
+        card.nickname = tempCardNickname
+        card.type = tempCardType
         dismiss()
     }
     
@@ -62,7 +64,7 @@ struct AddCardView: View {
                     }
                 }
             }
-            .navigationTitle("Add a New Card")
+            .navigationTitle("Edit Card")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -73,9 +75,21 @@ struct AddCardView: View {
                 }
             }
         }
+        .onAppear {
+            tempCardType = card.type
+            tempCardNickname = card.nickname
+        }
     }
 }
 
 #Preview {
-    AddCardView()
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: CreditCard.self, configurations: config)
+        let example = CreditCard(nickname: "My Amex Card", type: .amex)
+        return EditCardView(card: example)
+            .modelContainer(container)
+    } catch {
+        fatalError("Failed to create model container")
+    }
 }
