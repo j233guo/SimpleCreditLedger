@@ -14,6 +14,8 @@ struct AddCardView: View {
     @State private var tempCardNickname: String = "My VISA Card"
     @State private var tempCardType: CardType = .visa
     
+    var validateCardName: Bool { tempCardNickname.isEmpty == false }
+    
     func updateDefaultCardName(for cardType: CardType) {
         func isDefaultName(_ str: String) -> Bool {
             let pattern = "^My\\s.+\\sCard$"
@@ -25,6 +27,7 @@ struct AddCardView: View {
     }
     
     func save() {
+        guard validateCardName else { return }
         let newCard = CreditCard(nickname: tempCardNickname, type: tempCardType)
         modelContext.insert(newCard)
         dismiss()
@@ -53,7 +56,7 @@ struct AddCardView: View {
                 } header: {
                     Text("Card Nickname")
                 } footer: {
-                    if tempCardNickname.isEmpty {
+                    if !validateCardName {
                         Text("You must have a name for your card.")
                             .foregroundStyle(.red)
                     }

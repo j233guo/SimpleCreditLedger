@@ -21,14 +21,49 @@ struct AddTransactionView: View {
     @State private var tempTransactionDate: Date = .now
     @State private var tempTransactionNote: String = ""
     @State private var tempPaymentCreditCard: CreditCard? = nil
+    @State private var showAmountEmptyWarning = false
+    @State private var showCreditCardWarning = false
     
     @FocusState private var amountIsFocused: Bool
     @FocusState private var noteIsFocused: Bool
     
     var validateAmount: Bool { tempTransactionAmount > 0.0 }
     
+    var validateCreditCard: Bool {
+        if tempPaymentType == .credit {
+            guard tempPaymentCreditCard != nil else { return false }
+        }
+        return true
+    }
+    
+    func turnAmountEmptyWarning(_ value: Bool) {
+        withAnimation {
+            showAmountEmptyWarning = value
+        }
+    }
+    
+    func turnCreditCardWarning(_ value: Bool) {
+        withAnimation {
+            showCreditCardWarning = value
+        }
+    }
+    
     func save() {
-        guard validateAmount else { return }
+        guard validateAmount && validateCreditCard else {
+            if !validateAmount {
+                turnAmountEmptyWarning(true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    turnAmountEmptyWarning(false)
+                }
+            }
+            if !validateCreditCard {
+                turnCreditCardWarning(true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    turnCreditCardWarning(false)
+                }
+            }
+            return
+        }
         let newTransaction = Transaction(
             amount: tempTransactionAmount,
             transactionType: tempTransactionType,
@@ -67,6 +102,11 @@ struct AddTransactionView: View {
                         .keyboardType(.decimalPad)
                 } header: {
                     Text("Amount")
+                } footer: {
+                    if showAmountEmptyWarning {
+                        Text("Amount cannot be zero.")
+                            .foregroundStyle(.red)
+                    }
                 }
                 
                 Section {
@@ -92,6 +132,11 @@ struct AddTransactionView: View {
                                 }
                             }
                         }
+                    }
+                } footer: {
+                    if showCreditCardWarning {
+                        Text("Please select a credit card.")
+                            .foregroundStyle(.red)
                     }
                 }
                 
