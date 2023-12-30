@@ -56,7 +56,7 @@ struct TransactionDetailView: View {
                 .frame(maxWidth: .infinity)
             }
             Section {
-                Button("Edit Transaction Info") {
+                Button("Edit Transaction") {
                     showEditTransactionForm = true
                 }
                 Button("Delete This Transaction", role: .destructive) {
