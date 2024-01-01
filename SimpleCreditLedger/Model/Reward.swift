@@ -36,6 +36,24 @@ func formattedRewardMultiplier(_ rewardType: RewardType, _ number: Double) -> St
     }
 }
 
+func calculateReward(card: CreditCard, transaction: Transaction) -> Double {
+    var result = 0.0
+    if card.rewardType == .points {
+        for reward in card.rewards {
+            if reward.category == transaction.category {
+                result += (transaction.amount * reward.multiplier).rounded()
+            }
+        }
+    } else {
+        for reward in card.rewards {
+            if reward.category == transaction.category {
+                result += (transaction.amount * reward.multiplier * 0.01 * 100).rounded() / 100
+            }
+        }
+    }
+    return result
+}
+
 @Model
 final class Reward {
     var type: RewardType
