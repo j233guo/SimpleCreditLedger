@@ -24,7 +24,14 @@ struct CardDetailView: View {
         dismiss()
     }
     
+    func removeReward(_ reward: Reward) {
+        modelContext.delete(reward)
+    }
+    
     var body: some View {
+        let rewards = rewards.filter {
+            $0.card == card
+        }
         NavigationStack {
             List {
                 HStack {
@@ -34,16 +41,18 @@ struct CardDetailView: View {
                 }
                 
                 Section {
-                    let rewards = rewards.filter {
-                        $0.card == card
-                    }
                     ForEach(rewards) { reward in
-                        Text("\(reward.category.rawValue)")
+                        HStack {
+                            Text("\(reward.category.rawValue)")
+                            Spacer()
+                            Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                            Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                        }
                     }
                 } header: {
                     Text("Rewards")
                 } footer: {
-                    if card.rewards.count == 0 {
+                    if rewards.count == 0 {
                         Text("You have not registered any reward on this card.")
                     }
                 }

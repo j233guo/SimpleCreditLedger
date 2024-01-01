@@ -31,25 +31,14 @@ fileprivate struct AddRewardView: View {
                             .tag(category)
                     }
                 }
-                HStack {
-                    Button {
-                        withAnimation {
-                            expanded = false
-                        }
-                    } label: {
-                        Text("Cancel")
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                Button {
+                    addAction()
+                    withAnimation {
+                        expanded = false
                     }
-                    Divider()
-                    Button {
-                        withAnimation {
-                            addAction()
-                            expanded = false
-                        }
-                    } label: {
-                        Text("Add")
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    }
+                } label: {
+                    Text("Add")
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 }
             }
         } else {
@@ -98,9 +87,8 @@ struct EditCardView: View {
     }
     
     func saveReward() {
-        let newReward = Reward(type: card.rewardType, category: tempRewardCategory, multiplier: tempRewardMultiplier, card: card)
+        let newReward = Reward(type: tempRewardType, category: tempRewardCategory, multiplier: tempRewardMultiplier, card: card)
         modelContext.insert(newReward)
-        print(card.rewards)
     }
     
     func removeReward(_ reward: Reward) {
@@ -150,7 +138,19 @@ struct EditCardView: View {
                     }
                     List {
                         ForEach(rewards) { reward in
-                            Text("\(reward.category.rawValue)")
+                            HStack {
+                                Text("\(reward.category.rawValue)")
+                                Spacer()
+                                Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                                Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    removeReward(reward)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                         }
                     }
                 } header: {
