@@ -33,6 +33,54 @@ fileprivate struct TransactionInfoSection: View {
     }
 }
 
+fileprivate struct PaymentInfoSection: View {
+    let transaction: Transaction
+    
+    var calculatedReward: Double? {
+        if incomeCategories.contains(transaction.category) {
+            return nil
+        }
+        if let card = transaction.creditCard {
+            return calculateReward(card: card, transaction: transaction)
+        }
+        return nil
+    }
+    
+    var body: some View {
+        if transaction.paymentType == .cash {
+            Text("Cash")
+                .foregroundStyle(.secondary)
+        } else if transaction.paymentType == .debit {
+            Text("Debit")
+                .foregroundStyle(.secondary)
+        } else if transaction.paymentType == .credit {
+            if let card = transaction.creditCard {
+                VStack {
+                    HStack {
+                        CardLogoView(cardType: card.type)
+                        Text(card.nickname)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(height: 30)
+                    Group {
+                        if card.rewardType == .points {
+                            if let points = calculatedReward {
+                                Text("You earned \(String(Int(points))) points on this card.")
+                            }
+                        } else if card.rewardType == .cashback {
+                            if let cash = calculatedReward {
+                                Text("You earned \(formatAsCurrency(cash)) on this card.")
+                            }
+                        }
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+}
+
 struct TransactionDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -52,6 +100,15 @@ struct TransactionDetailView: View {
             Section {
                 VStack(alignment: .center) {
                     TransactionInfoSection(transaction: transaction)
+                    if transaction.transactionType == .expense {
+                        Divider()
+                        PaymentInfoSection(transaction: transaction)
+                    }
+                    if transaction.note.isEmpty == false {
+                        Divider()
+                        Text(transaction.note)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity)
             }

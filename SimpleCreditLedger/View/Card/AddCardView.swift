@@ -13,6 +13,7 @@ struct AddCardView: View {
     
     @State private var tempCardNickname: String = "My VISA Card"
     @State private var tempCardType: CardType = .visa
+    @State private var tempRewardType: RewardType = .cashback
     
     var validateCardName: Bool { tempCardNickname.isEmpty == false }
     
@@ -28,7 +29,7 @@ struct AddCardView: View {
     
     func save() {
         guard validateCardName else { return }
-        let newCard = CreditCard(nickname: tempCardNickname, type: tempCardType)
+        let newCard = CreditCard(nickname: tempCardNickname, type: tempCardType, rewardType: tempRewardType)
         modelContext.insert(newCard)
         dismiss()
     }
@@ -59,6 +60,14 @@ struct AddCardView: View {
                     if !validateCardName {
                         Text("You must have a name for your card.")
                             .foregroundStyle(.red)
+                    }
+                }
+                
+                Section {
+                    Picker("Card Reward Type", selection: $tempRewardType) {
+                        ForEach(RewardType.allCases, id: \.self) { type in
+                            Text(type.rawValue).tag(type)
+                        }
                     }
                 }
             }
