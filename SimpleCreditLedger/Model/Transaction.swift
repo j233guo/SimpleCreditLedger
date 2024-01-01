@@ -17,7 +17,7 @@ enum PaymentType: Codable {
     case cash, debit, credit
 }
 
-enum TransactionCategory: String, Codable {
+enum TransactionCategory: String, Codable, CaseIterable {
     case salary = "Salary"
     case investment = "Investment"
     case gift = "Gift"

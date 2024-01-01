@@ -18,11 +18,13 @@ enum CardType: String, Codable, CaseIterable {
 final class CreditCard {
     var nickname: String
     var type: CardType
+    var rewardType: RewardType
     @Relationship(deleteRule: .nullify, inverse: \Transaction.creditCard) var transactions = [Transaction]()
+    @Relationship(deleteRule: .cascade, inverse: \Reward.card) var rewards = [Reward]()
     
-    init(nickname: String, type: CardType, transactions: [Transaction] = [Transaction]()) {
+    init(nickname: String, type: CardType, rewardType: RewardType) {
         self.nickname = nickname
         self.type = type
-        self.transactions = transactions
+        self.rewardType = rewardType
     }
 }

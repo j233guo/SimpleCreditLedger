@@ -14,6 +14,6 @@ struct SimpleCreditLedgerApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Transaction.self, CreditCard.self])
+        .modelContainer(for: [Transaction.self, CreditCard.self, Reward.self])
     }
 }

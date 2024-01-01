@@ -17,6 +17,8 @@ struct CardDetailView: View {
     @State private var showEditCardForm = false
     @State private var showDeleteConfirmation = false
     
+    @Query private var rewards: [Reward]
+    
     func deleteCard() {
         modelContext.delete(card)
         dismiss()
@@ -32,6 +34,21 @@ struct CardDetailView: View {
                 }
                 
                 Section {
+                    let rewards = rewards.filter {
+                        $0.card == card
+                    }
+                    ForEach(rewards) { reward in
+                        Text("\(reward.category.rawValue)")
+                    }
+                } header: {
+                    Text("Rewards")
+                } footer: {
+                    if card.rewards.count == 0 {
+                        Text("You have not registered any reward on this card.")
+                    }
+                }
+                
+                Section {
                     Button("Edit Card") {
                         showEditCardForm = true
                     }
@@ -39,6 +56,7 @@ struct CardDetailView: View {
                         showDeleteConfirmation = true
                     }
                 }
+                
             }
             .navigationTitle("\(card.nickname)")
             .navigationBarTitleDisplayMode(.inline)
@@ -55,8 +73,8 @@ struct CardDetailView: View {
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: CreditCard.self, configurations: config)
-        let example = CreditCard(nickname: "My Amex Card", type: .amex)
+        let container = try ModelContainer(for: CreditCard.self, Reward.self, configurations: config)
+        let example = CreditCard(nickname: "My Amex Card", type: .amex, rewardType: .points)
         return CardDetailView(card: example)
             .modelContainer(container)
     } catch {
