@@ -8,6 +8,46 @@
 import SwiftData
 import SwiftUI
 
+fileprivate struct CardRewardsSection: View {
+    @Environment(\.modelContext) private var modelContext
+    
+    @Query private var rewards: [Reward]
+    
+    init(predicate: Predicate<Reward>) {
+        _rewards = Query(filter: predicate)
+    }
+    
+    func removeReward(_ reward: Reward) {
+        modelContext.delete(reward)
+    }
+    
+    var body: some View {
+        Section {
+            ForEach(rewards) { reward in
+                HStack {
+                    Text("\(reward.category.rawValue)")
+                    Spacer()
+                    Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                    Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                }
+                .contextMenu {
+                    Button(role: .destructive) {
+                        removeReward(reward)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+            }
+        } header: {
+            Text("Rewards")
+        } footer: {
+            if rewards.count == 0 {
+                Text("You have not registered any reward on this card.")
+            }
+        }
+    }
+}
+
 fileprivate struct AddRewardView: View {
     @Binding var expanded: Bool
     @Binding var tempRewardMultiplier: Double
@@ -91,10 +131,6 @@ struct EditCardView: View {
         modelContext.insert(newReward)
     }
     
-    func removeReward(_ reward: Reward) {
-        modelContext.delete(reward)
-    }
-    
     var body: some View {
         NavigationStack {
             Form {
@@ -132,30 +168,11 @@ struct EditCardView: View {
                     }
                 }
                 
-                Section {
-                    let rewards = rewards.filter {
-                        $0.card == card
-                    }
-                    List {
-                        ForEach(rewards) { reward in
-                            HStack {
-                                Text("\(reward.category.rawValue)")
-                                Spacer()
-                                Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
-                                Text("\(reward.type == .cashback ? "Cashback" : "Point")")
-                            }
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    removeReward(reward)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Rewards")
+                let cardName = card.nickname
+                let rewardPredicate = #Predicate<Reward> { reward in
+                    reward.card.nickname == cardName
                 }
+                CardRewardsSection(predicate: rewardPredicate)
                 
                 Section {
                     AddRewardView(expanded: $expandAddReward, tempRewardMultiplier: $tempRewardMultiplier, tempRewardCategory: $tempRewardCategory, rewardType: tempRewardType) {
@@ -170,7 +187,7 @@ struct EditCardView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: saveCard)
+                    Button("Done", action: saveCard)
                 }
             }
         }

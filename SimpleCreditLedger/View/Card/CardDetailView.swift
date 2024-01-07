@@ -8,6 +8,33 @@
 import SwiftData
 import SwiftUI
 
+fileprivate struct CardRewardsSection: View {
+    @Query private var rewards: [Reward]
+    
+    init(predicate: Predicate<Reward>) {
+        _rewards = Query(filter: predicate)
+    }
+    
+    var body: some View {
+        Section {
+            ForEach(rewards) { reward in
+                HStack {
+                    Text("\(reward.category.rawValue)")
+                    Spacer()
+                    Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                    Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                }
+            }
+        } header: {
+            Text("Rewards")
+        } footer: {
+            if rewards.count == 0 {
+                Text("You have not registered any reward on this card.")
+            }
+        }
+    }
+}
+
 struct CardDetailView: View {
     let card: CreditCard
     
@@ -16,8 +43,6 @@ struct CardDetailView: View {
     
     @State private var showEditCardForm = false
     @State private var showDeleteConfirmation = false
-    
-    @Query private var rewards: [Reward]
     
     func deleteCard() {
         modelContext.delete(card)
@@ -29,9 +54,6 @@ struct CardDetailView: View {
     }
     
     var body: some View {
-        let rewards = rewards.filter {
-            $0.card == card
-        }
         NavigationStack {
             List {
                 HStack {
@@ -40,22 +62,11 @@ struct CardDetailView: View {
                         .font(.headline)
                 }
                 
-                Section {
-                    ForEach(rewards) { reward in
-                        HStack {
-                            Text("\(reward.category.rawValue)")
-                            Spacer()
-                            Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
-                            Text("\(reward.type == .cashback ? "Cashback" : "Point")")
-                        }
-                    }
-                } header: {
-                    Text("Rewards")
-                } footer: {
-                    if rewards.count == 0 {
-                        Text("You have not registered any reward on this card.")
-                    }
+                let cardName = card.nickname
+                let rewardPredicate = #Predicate<Reward> { reward in
+                    reward.card.nickname == cardName
                 }
+                CardRewardsSection(predicate: rewardPredicate)
                 
                 Section {
                     Button("Edit Card") {
