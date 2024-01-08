@@ -104,6 +104,7 @@ struct EditCardView: View {
     @State private var expandAddReward = false
     @State private var tempRewardMultiplier: Double = 1.0
     @State private var tempRewardCategory: TransactionCategory = .misc
+    @State private var displayDuplicateCardWarning = false
     
     @Query private var rewards: [Reward]
     
@@ -121,9 +122,21 @@ struct EditCardView: View {
     
     func saveCard() {
         guard validateCardName else { return }
-        card.nickname = tempCardNickname
-        card.type = tempCardType
-        dismiss()
+        let descriptor = FetchDescriptor<CreditCard>(predicate: #Predicate{ card in
+            card.nickname == tempCardNickname
+        })
+        do {
+            let cards = try modelContext.fetch(descriptor)
+            if tempCardNickname != card.nickname && !(cards.isEmpty) {
+                displayDuplicateCardWarning = true
+            } else {
+                card.nickname = tempCardNickname
+                card.type = tempCardType
+                dismiss()
+            }
+        } catch {
+            print("An error occured when trying to check credit card list.")
+        }
     }
     
     func saveReward() {
@@ -154,10 +167,18 @@ struct EditCardView: View {
                 } header: {
                     Text("Card Nickname")
                 } footer: {
-                    if !validateCardName {
-                        Text("You must have a name for your card.")
-                            .foregroundStyle(.red)
+                    Group {
+                        if !validateCardName {
+                            Text("You must have a name for your card.")
+                        }
+                        if displayDuplicateCardWarning {
+                            Text("A card with the same name already exists.")
+                        }
                     }
+                    .foregroundStyle(.red)
+                }
+                .onChange(of: tempCardNickname) {
+                    displayDuplicateCardWarning = false
                 }
                 
                 Section {

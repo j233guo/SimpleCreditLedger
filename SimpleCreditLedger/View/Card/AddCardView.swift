@@ -42,7 +42,6 @@ struct AddCardView: View {
                 dismiss()
             } else {
                 displayDuplicateCardWarning = true
-                return
             }
         } catch {
             print("An error occured when trying to check credit card list.")
