@@ -37,7 +37,7 @@ fileprivate struct PaymentInfoSection: View {
     let transaction: Transaction
     
     var calculatedReward: Double? {
-        if incomeCategories.contains(transaction.category) {
+        if transaction.transactionType == .income {
             return nil
         }
         if let card = transaction.creditCard {
