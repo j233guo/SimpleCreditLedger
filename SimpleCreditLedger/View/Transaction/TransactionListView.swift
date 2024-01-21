@@ -8,6 +8,10 @@
 import SwiftData
 import SwiftUI
 
+enum TransactionListType {
+    case transaction, reward
+}
+
 fileprivate struct FilterView: View {
     @Binding var isExpanded: Bool
     @Binding var startDate: Date
@@ -33,6 +37,7 @@ fileprivate struct FilterView: View {
 
 struct TransactionListView: View {
     var transactions: [Transaction]
+    var listType: TransactionListType
     
     @Binding var filterExpanded: Bool
     @Binding var startDate: Date
@@ -59,9 +64,13 @@ struct TransactionListView: View {
                 ForEach(groupedTransactions.keys.sorted { $0 > $1 }, id: \.self) { date in
                     Section(header: Text("\(date, formatter: sectionDateFormatter)")) {
                         ForEach(groupedTransactions[date]!, id: \.id) { data in
-                            NavigationLink {
-                                TransactionDetailView(transaction: data)
-                            } label: {
+                            if listType == .transaction {
+                                NavigationLink {
+                                    TransactionDetailView(transaction: data)
+                                } label: {
+                                    TransactionListRowView(transaction: data)
+                                }
+                            } else {
                                 TransactionListRowView(transaction: data)
                             }
                         }
@@ -78,7 +87,7 @@ struct TransactionListView: View {
         let container = try ModelContainer(for: Transaction.self, configurations: config)
         let example1 = Transaction(amount: 100.00, transactionType: .expense, category: .dining, date: .distantFuture, note: "")
         let example2 = Transaction(amount: 500.00, transactionType: .income, category: .salary, date: .now, note: "")
-        return TransactionListView(transactions: [example1, example2], filterExpanded: Binding.constant(true), startDate: Binding.constant(.now), endDate: Binding.constant(.now))
+        return TransactionListView(transactions: [example1, example2], listType: .transaction, filterExpanded: Binding.constant(true), startDate: Binding.constant(.now), endDate: Binding.constant(.now))
             .modelContainer(container)
     } catch {
         fatalError("Failed to create model container")

@@ -142,6 +142,7 @@ struct EditCardView: View {
     func saveReward() {
         let newReward = Reward(type: tempRewardType, category: tempRewardCategory, multiplier: tempRewardMultiplier, card: card)
         modelContext.insert(newReward)
+        try? modelContext.save()
     }
     
     var body: some View {

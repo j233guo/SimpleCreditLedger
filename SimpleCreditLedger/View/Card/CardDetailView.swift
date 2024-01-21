@@ -53,6 +53,20 @@ struct CardDetailView: View {
         modelContext.delete(reward)
     }
     
+    var rewardPredicate: Predicate<Reward> {
+        let cardName = card.nickname
+        return #Predicate<Reward> { reward in
+            reward.card.nickname == cardName
+        }
+    }
+    
+    var transactionPredicate: Predicate<Transaction> {
+        let cardName = card.nickname
+        return #Predicate<Transaction> { transaction in
+            transaction.creditCard?.nickname == cardName
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -62,11 +76,13 @@ struct CardDetailView: View {
                         .font(.headline)
                 }
                 
-                let cardName = card.nickname
-                let rewardPredicate = #Predicate<Reward> { reward in
-                    reward.card.nickname == cardName
-                }
                 CardRewardsSection(predicate: rewardPredicate)
+                
+                Section {
+                    NavigationLink(destination: CardTransactionsView(predicate: transactionPredicate)) {
+                        Text("Transactions on This Card")
+                    }
+                }
                 
                 Section {
                     Button("Edit Card") {
