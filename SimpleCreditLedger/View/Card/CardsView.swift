@@ -11,6 +11,8 @@ import SwiftUI
 struct CardsView: View {
     @State private var showAddCardForm = false
     
+    @StateObject private var creditCardViewModel = CreditCardViewModel()
+    
     @Query private var cards: [CreditCard]
     
     var body: some View {

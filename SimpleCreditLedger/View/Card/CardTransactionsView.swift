@@ -35,6 +35,7 @@ struct CardTransactionsView: View {
                 isDate(transaction.date, greaterThanOrEqualTo: startDate) && isDate(transaction.date, lessThanOrEqualTo: endDate)
             } : transactions
             CardTransactionRewardView(transactions: transactions, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
+                .navigationTitle("Transactions")
         }
     }
 }

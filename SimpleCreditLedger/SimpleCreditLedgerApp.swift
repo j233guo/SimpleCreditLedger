@@ -13,6 +13,7 @@ struct SimpleCreditLedgerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(CreditCardViewModel())
         }
         .modelContainer(for: [Transaction.self, CreditCard.self, Reward.self])
     }

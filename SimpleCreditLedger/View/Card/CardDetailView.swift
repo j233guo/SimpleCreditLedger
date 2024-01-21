@@ -41,6 +41,8 @@ struct CardDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
+    @EnvironmentObject var creditCardViewModel: CreditCardViewModel
+    
     @State private var showEditCardForm = false
     @State private var showDeleteConfirmation = false
     
@@ -103,6 +105,9 @@ struct CardDetailView: View {
         .confirmationDialog("Confirm Delete", isPresented: $showDeleteConfirmation) {
             Button("Confirm Delete", role: .destructive, action: deleteCard)
         }
+        .onAppear {
+            creditCardViewModel.currentCard = card
+        }
     }
 }
 
@@ -113,6 +118,7 @@ struct CardDetailView: View {
         let example = CreditCard(nickname: "My Amex Card", type: .amex, rewardType: .points)
         return CardDetailView(card: example)
             .modelContainer(container)
+            .environmentObject(CreditCardViewModel())
     } catch {
         fatalError("Failed to create model container")
     }

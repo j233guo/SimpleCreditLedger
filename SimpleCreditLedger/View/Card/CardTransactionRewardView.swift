@@ -9,7 +9,17 @@ import SwiftData
 import SwiftUI
 
 fileprivate struct CardTransactionRewardRowView: View {
+    @EnvironmentObject var creditCardViewModel: CreditCardViewModel
+    
+    @State private var calculatedReward: Double = 0.0
+    
     let transaction: Transaction
+    
+    func calculateRewards() {
+        if let card = creditCardViewModel.currentCard {
+            calculatedReward = calculateReward(card: card, transaction: transaction)
+        }
+    }
     
     var body: some View {
         HStack {
@@ -20,20 +30,39 @@ fileprivate struct CardTransactionRewardRowView: View {
                     .font(.headline)
             }
             Spacer()
-            let sign = transaction.transactionType == .expense ? "-" : "+"
-            Text("\(sign)\(formatAsCurrency(transaction.amount))")
-                .font(.headline)
-                .foregroundStyle(transaction.transactionType == .expense ? .primary : Color.green)
+            if let card = creditCardViewModel.currentCard {
+                if card.rewardType == .points {
+                    let formattedReward = String(Int(calculatedReward))
+                    Text("+ \(formattedReward) pts")
+                        .font(.headline)
+                        .foregroundStyle(.green)
+                } else if card.rewardType == .cashback {
+                    let formattedReward = formatAsCurrency(calculatedReward)
+                    Text("+ \(formattedReward)")
+                        .font(.headline)
+                        .foregroundStyle(.green)
+                }
+            }
+        }
+        .onAppear {
+            calculateRewards()
+        }
+        .onChange(of: transaction) {
+            calculateRewards()
         }
     }
 }
 
 struct CardTransactionRewardView: View {
+    @EnvironmentObject var creditCardViewModel: CreditCardViewModel
+    
     var transactions: [Transaction]
     
     @Binding var filterExpanded: Bool
     @Binding var startDate: Date
     @Binding var endDate: Date
+    
+    @State private var calculatedRewards: Double = 0.0
     
     private let sectionDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -41,10 +70,27 @@ struct CardTransactionRewardView: View {
         return formatter
     }()
     
+    func calculateRewards() {
+        if let card = creditCardViewModel.currentCard {
+            var reward = 0.0
+            transactions.forEach { transaction in
+                reward += calculateReward(card: card, transaction: transaction)
+            }
+            calculatedRewards = reward
+        }
+    }
+    
     var body: some View {
         List {
             Section {
                 FilterView(isExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
+            }
+            
+            Section {
+                if let card = creditCardViewModel.currentCard {
+                    let formattedRewards = card.rewardType == .points ? String(Int(calculatedRewards)) : formatAsCurrency(calculatedRewards)
+                    Text("Total Rewards: \(formattedRewards) \(card.rewardType.rawValue)")
+                }
             }
             
             if transactions.count == 0 {
@@ -62,6 +108,12 @@ struct CardTransactionRewardView: View {
                 }
             }
         }
+        .onAppear {
+            calculateRewards()
+        }
+        .onChange(of: transactions) {
+            calculateRewards()
+        }
     }
 }
 
@@ -73,6 +125,7 @@ struct CardTransactionRewardView: View {
         let example2 = Transaction(amount: 500.00, transactionType: .income, category: .salary, date: .now, note: "")
         return CardTransactionRewardView(transactions: [example1, example2], filterExpanded: Binding.constant(true), startDate: Binding.constant(.now), endDate: Binding.constant(.now))
             .modelContainer(container)
+            .environmentObject(CreditCardViewModel())
     } catch {
         fatalError("Failed to create model container")
     }
