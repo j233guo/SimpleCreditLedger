@@ -42,7 +42,7 @@ struct TransactionsView: View {
                     let transactions = filterExpanded ? transactions.filter { transaction in
                         isDate(transaction.date, greaterThanOrEqualTo: startDate) && isDate(transaction.date, lessThanOrEqualTo: endDate)
                     } : transactions
-                    TransactionListView(transactions: transactions, listType: .transaction, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
+                    TransactionListView(transactions: transactions, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
                 }
             }
             .foregroundStyle(.secondary)

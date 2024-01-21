@@ -34,7 +34,7 @@ struct CardTransactionsView: View {
             let transactions = filterExpanded ? transactions.filter { transaction in
                 isDate(transaction.date, greaterThanOrEqualTo: startDate) && isDate(transaction.date, lessThanOrEqualTo: endDate)
             } : transactions
-            TransactionListView(transactions: transactions, listType: .reward, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
+            CardTransactionRewardView(transactions: transactions, filterExpanded: $filterExpanded, startDate: $startDate, endDate: $endDate)
         }
     }
 }
