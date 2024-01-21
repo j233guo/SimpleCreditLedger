@@ -8,29 +8,6 @@
 import SwiftData
 import SwiftUI
 
-fileprivate struct FilterView: View {
-    @Binding var isExpanded: Bool
-    @Binding var startDate: Date
-    @Binding var endDate: Date
-
-    var body: some View {
-        VStack {
-            Toggle(isOn: $isExpanded) {
-                HStack {
-                    Image(systemName: "slider.horizontal.3")
-                        .padding(.trailing)
-                    Text("Filter")
-                }
-            }
-
-            if isExpanded {
-                DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
-                DatePicker("End Date", selection: $endDate, displayedComponents: .date)
-            }
-        }
-    }
-}
-
 struct TransactionListView: View {
     var transactions: [Transaction]
     

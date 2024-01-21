@@ -34,17 +34,8 @@ fileprivate struct TransactionInfoSection: View {
 }
 
 fileprivate struct PaymentInfoSection: View {
+    @State private var calculatedReward: Double?
     let transaction: Transaction
-    
-    var calculatedReward: Double? {
-        if incomeCategories.contains(transaction.category) {
-            return nil
-        }
-        if let card = transaction.creditCard {
-            return calculateReward(card: card, transaction: transaction)
-        }
-        return nil
-    }
     
     var body: some View {
         if transaction.paymentType == .cash {
@@ -75,6 +66,11 @@ fileprivate struct PaymentInfoSection: View {
                     }
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                }
+                .onAppear {
+                    if let card = transaction.creditCard {
+                        calculatedReward = calculateReward(card: card, transaction: transaction)
+                    }
                 }
             }
         }

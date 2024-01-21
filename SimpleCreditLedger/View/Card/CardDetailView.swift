@@ -8,16 +8,43 @@
 import SwiftData
 import SwiftUI
 
+fileprivate struct CardRewardsSection: View {
+    @Query private var rewards: [Reward]
+    
+    init(predicate: Predicate<Reward>) {
+        _rewards = Query(filter: predicate)
+    }
+    
+    var body: some View {
+        Section {
+            ForEach(rewards) { reward in
+                HStack {
+                    Text("\(reward.category.rawValue)")
+                    Spacer()
+                    Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                    Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                }
+            }
+        } header: {
+            Text("Rewards")
+        } footer: {
+            if rewards.count == 0 {
+                Text("You have not registered any reward on this card.")
+            }
+        }
+    }
+}
+
 struct CardDetailView: View {
     let card: CreditCard
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
+    @EnvironmentObject var creditCardViewModel: CreditCardViewModel
+    
     @State private var showEditCardForm = false
     @State private var showDeleteConfirmation = false
-    
-    @Query private var rewards: [Reward]
     
     func deleteCard() {
         modelContext.delete(card)
@@ -28,10 +55,21 @@ struct CardDetailView: View {
         modelContext.delete(reward)
     }
     
-    var body: some View {
-        let rewards = rewards.filter {
-            $0.card == card
+    var rewardPredicate: Predicate<Reward> {
+        let cardName = card.nickname
+        return #Predicate<Reward> { reward in
+            reward.card.nickname == cardName
         }
+    }
+    
+    var transactionPredicate: Predicate<Transaction> {
+        let cardName = card.nickname
+        return #Predicate<Transaction> { transaction in
+            transaction.creditCard?.nickname == cardName
+        }
+    }
+    
+    var body: some View {
         NavigationStack {
             List {
                 HStack {
@@ -40,20 +78,11 @@ struct CardDetailView: View {
                         .font(.headline)
                 }
                 
+                CardRewardsSection(predicate: rewardPredicate)
+                
                 Section {
-                    ForEach(rewards) { reward in
-                        HStack {
-                            Text("\(reward.category.rawValue)")
-                            Spacer()
-                            Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
-                            Text("\(reward.type == .cashback ? "Cashback" : "Point")")
-                        }
-                    }
-                } header: {
-                    Text("Rewards")
-                } footer: {
-                    if rewards.count == 0 {
-                        Text("You have not registered any reward on this card.")
+                    NavigationLink(destination: CardTransactionsView(predicate: transactionPredicate)) {
+                        Text("Transactions on This Card")
                     }
                 }
                 
@@ -76,6 +105,9 @@ struct CardDetailView: View {
         .confirmationDialog("Confirm Delete", isPresented: $showDeleteConfirmation) {
             Button("Confirm Delete", role: .destructive, action: deleteCard)
         }
+        .onAppear {
+            creditCardViewModel.currentCard = card
+        }
     }
 }
 
@@ -86,6 +118,7 @@ struct CardDetailView: View {
         let example = CreditCard(nickname: "My Amex Card", type: .amex, rewardType: .points)
         return CardDetailView(card: example)
             .modelContainer(container)
+            .environmentObject(CreditCardViewModel())
     } catch {
         fatalError("Failed to create model container")
     }

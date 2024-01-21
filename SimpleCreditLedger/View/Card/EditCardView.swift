@@ -8,6 +8,46 @@
 import SwiftData
 import SwiftUI
 
+fileprivate struct CardRewardsSection: View {
+    @Environment(\.modelContext) private var modelContext
+    
+    @Query private var rewards: [Reward]
+    
+    init(predicate: Predicate<Reward>) {
+        _rewards = Query(filter: predicate)
+    }
+    
+    func removeReward(_ reward: Reward) {
+        modelContext.delete(reward)
+    }
+    
+    var body: some View {
+        Section {
+            ForEach(rewards) { reward in
+                HStack {
+                    Text("\(reward.category.rawValue)")
+                    Spacer()
+                    Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
+                    Text("\(reward.type == .cashback ? "Cashback" : "Point")")
+                }
+                .contextMenu {
+                    Button(role: .destructive) {
+                        removeReward(reward)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+            }
+        } header: {
+            Text("Rewards")
+        } footer: {
+            if rewards.count == 0 {
+                Text("You have not registered any reward on this card.")
+            }
+        }
+    }
+}
+
 fileprivate struct AddRewardView: View {
     @Binding var expanded: Bool
     @Binding var tempRewardMultiplier: Double
@@ -64,6 +104,7 @@ struct EditCardView: View {
     @State private var expandAddReward = false
     @State private var tempRewardMultiplier: Double = 1.0
     @State private var tempRewardCategory: TransactionCategory = .misc
+    @State private var displayDuplicateCardWarning = false
     
     @Query private var rewards: [Reward]
     
@@ -81,18 +122,27 @@ struct EditCardView: View {
     
     func saveCard() {
         guard validateCardName else { return }
-        card.nickname = tempCardNickname
-        card.type = tempCardType
-        dismiss()
+        let descriptor = FetchDescriptor<CreditCard>(predicate: #Predicate{ card in
+            card.nickname == tempCardNickname
+        })
+        do {
+            let cards = try modelContext.fetch(descriptor)
+            if tempCardNickname != card.nickname && !(cards.isEmpty) {
+                displayDuplicateCardWarning = true
+            } else {
+                card.nickname = tempCardNickname
+                card.type = tempCardType
+                dismiss()
+            }
+        } catch {
+            print("An error occured when trying to check credit card list.")
+        }
     }
     
     func saveReward() {
         let newReward = Reward(type: tempRewardType, category: tempRewardCategory, multiplier: tempRewardMultiplier, card: card)
         modelContext.insert(newReward)
-    }
-    
-    func removeReward(_ reward: Reward) {
-        modelContext.delete(reward)
+        try? modelContext.save()
     }
     
     var body: some View {
@@ -118,10 +168,18 @@ struct EditCardView: View {
                 } header: {
                     Text("Card Nickname")
                 } footer: {
-                    if !validateCardName {
-                        Text("You must have a name for your card.")
-                            .foregroundStyle(.red)
+                    Group {
+                        if !validateCardName {
+                            Text("You must have a name for your card.")
+                        }
+                        if displayDuplicateCardWarning {
+                            Text("A card with the same name already exists.")
+                        }
                     }
+                    .foregroundStyle(.red)
+                }
+                .onChange(of: tempCardNickname) {
+                    displayDuplicateCardWarning = false
                 }
                 
                 Section {
@@ -132,30 +190,11 @@ struct EditCardView: View {
                     }
                 }
                 
-                Section {
-                    let rewards = rewards.filter {
-                        $0.card == card
-                    }
-                    List {
-                        ForEach(rewards) { reward in
-                            HStack {
-                                Text("\(reward.category.rawValue)")
-                                Spacer()
-                                Text("\(formattedRewardMultiplier(reward.type, reward.multiplier))")
-                                Text("\(reward.type == .cashback ? "Cashback" : "Point")")
-                            }
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    removeReward(reward)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Rewards")
+                let cardName = card.nickname
+                let rewardPredicate = #Predicate<Reward> { reward in
+                    reward.card.nickname == cardName
                 }
+                CardRewardsSection(predicate: rewardPredicate)
                 
                 Section {
                     AddRewardView(expanded: $expandAddReward, tempRewardMultiplier: $tempRewardMultiplier, tempRewardCategory: $tempRewardCategory, rewardType: tempRewardType) {
@@ -170,7 +209,7 @@ struct EditCardView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: saveCard)
+                    Button("Done", action: saveCard)
                 }
             }
         }

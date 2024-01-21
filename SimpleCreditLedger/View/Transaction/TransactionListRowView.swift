@@ -18,6 +18,7 @@ struct TransactionListRowView: View {
             VStack(alignment: .leading) {
                 Text(transaction.category.rawValue)
                     .font(.headline)
+                    .foregroundStyle(.primary)
             }
             Spacer()
             let sign = transaction.transactionType == .expense ? "-" : "+"
