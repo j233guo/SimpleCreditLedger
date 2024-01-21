@@ -20,6 +20,7 @@ struct FilterView: View {
                         .padding(.trailing)
                     Text("Filter")
                 }
+                .foregroundStyle(.primary)
             }
 
             if isExpanded {
